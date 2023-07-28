@@ -45,6 +45,11 @@ from plane.api.views import (
     UserIssueCompletedGraphEndpoint,
     UserWorkspaceDashboardEndpoint,
     WorkspaceThemeViewSet,
+    WorkspaceUserProfileStatsEndpoint,
+    WorkspaceUserActivityEndpoint,
+    WorkspaceUserProfileEndpoint,
+    WorkspaceUserProfileIssuesEndpoint,
+    WorkspaceLabelsEndpoint,
     ## End Workspaces
     # File Assets
     FileAssetEndpoint,
@@ -384,6 +389,31 @@ urlpatterns = [
             }
         ),
         name="workspace-themes",
+    ),
+    path(
+        "workspaces/<str:slug>/user-stats/<uuid:user_id>/",
+        WorkspaceUserProfileStatsEndpoint.as_view(),
+        name="workspace-user-stats",
+    ),
+    path(
+        "workspaces/<str:slug>/user-activity/<uuid:user_id>/",
+        WorkspaceUserActivityEndpoint.as_view(),
+        name="workspace-user-activity",
+    ),
+    path(
+        "workspaces/<str:slug>/user-profile/<uuid:user_id>/",
+        WorkspaceUserProfileEndpoint.as_view(),
+        name="workspace-user-profile-page",
+    ),
+    path(
+        "workspaces/<str:slug>/user-issues/<uuid:user_id>/",
+        WorkspaceUserProfileIssuesEndpoint.as_view(),
+        name="workspace-user-profile-issues",
+    ),
+    path(
+        "workspaces/<str:slug>/labels/",
+        WorkspaceLabelsEndpoint.as_view(),
+        name="workspace-labels",
     ),
     ## End Workspaces ##
     # Projects
@@ -1240,7 +1270,7 @@ urlpatterns = [
     ##  End Importer
     # Search
     path(
-        "workspaces/<str:slug>/projects/<uuid:project_id>/search/",
+        "workspaces/<str:slug>/search/",
         GlobalSearchEndpoint.as_view(),
         name="global-search",
     ),

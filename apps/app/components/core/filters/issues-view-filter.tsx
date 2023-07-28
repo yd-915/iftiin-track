@@ -65,6 +65,8 @@ export const IssuesFilterView: React.FC = () => {
     orderBy,
     setOrderBy,
     showEmptyGroups,
+    showSubIssues,
+    setShowSubIssues,
     setShowEmptyGroups,
     filters,
     setFilters,
@@ -185,16 +187,19 @@ export const IssuesFilterView: React.FC = () => {
                                 ?.name ?? "Select"
                             }
                           >
-                            {GROUP_BY_OPTIONS.map((option) =>
-                              issueView === "kanban" && option.key === null ? null : (
+                            {GROUP_BY_OPTIONS.map((option) => {
+                              if (issueView === "kanban" && option.key === null) return null;
+                              if (option.key === "project") return null;
+
+                              return (
                                 <CustomMenu.MenuItem
                                   key={option.key}
                                   onClick={() => setGroupByProperty(option.key)}
                                 >
                                   {option.name}
                                 </CustomMenu.MenuItem>
-                              )
-                            )}
+                              );
+                            })}
                           </CustomMenu>
                         </div>
                         <div className="flex items-center justify-between">
@@ -246,6 +251,13 @@ export const IssuesFilterView: React.FC = () => {
 
                     {issueView !== "calendar" && issueView !== "spreadsheet" && (
                       <>
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-custom-text-200">Show sub-issues</h4>
+                          <ToggleSwitch
+                            value={showSubIssues}
+                            onChange={() => setShowSubIssues(!showSubIssues)}
+                          />
+                        </div>
                         <div className="flex items-center justify-between">
                           <h4 className="text-custom-text-200">Show empty states</h4>
                           <ToggleSwitch

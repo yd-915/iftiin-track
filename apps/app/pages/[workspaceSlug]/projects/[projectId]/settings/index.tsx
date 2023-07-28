@@ -145,6 +145,15 @@ const GeneralSettings: NextPage = () => {
     else await updateProject(payload);
   };
 
+  const handleIdentifierChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    const alphanumericValue = value.replace(/[^a-zA-Z0-9]/g, "");
+    const formattedValue = alphanumericValue.toUpperCase();
+
+    setValue("identifier", formattedValue);
+  };
+
   const currentNetwork = NETWORK_CHOICES.find((n) => n.key === projectDetails?.network);
 
   return (
@@ -186,22 +195,7 @@ const GeneralSettings: NextPage = () => {
                     name="emoji_and_icon"
                     render={({ field: { value, onChange } }) => (
                       <EmojiIconPicker
-                        label={
-                          value ? (
-                            typeof value === "object" ? (
-                              <span
-                                style={{ color: value.color }}
-                                className="material-symbols-rounded text-lg"
-                              >
-                                {value.name}
-                              </span>
-                            ) : (
-                              renderEmoji(value)
-                            )
-                          ) : (
-                            "Icon"
-                          )
-                        }
+                        label={value ? renderEmoji(value) : "Icon"}
                         value={value}
                         onChange={onChange}
                       />
@@ -303,10 +297,11 @@ const GeneralSettings: NextPage = () => {
                   error={errors.identifier}
                   register={register}
                   placeholder="Enter identifier"
+                  onChange={handleIdentifierChange}
                   validations={{
                     required: "Identifier is required",
                     validate: (value) =>
-                      /^[A-Z]+$/.test(value) || "Identifier must be uppercase text.",
+                      /^[A-Z0-9]+$/.test(value.toUpperCase()) || "Identifier must be in uppercase.",
                     minLength: {
                       value: 1,
                       message: "Identifier must at least be of 1 character",
